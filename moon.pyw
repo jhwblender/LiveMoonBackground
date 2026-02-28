@@ -6,17 +6,23 @@ import configparser #for reading settings file
 import cv2
 
 ### Grabbing Config ###
-# configPath = os.getcwd()
 pyFilePath = os.path.abspath(__file__)
 configDir = os.path.dirname(pyFilePath)
-configPath = os.path.join(configDir, "config.ini")
-if(os.path.exists(configPath)):
-    print(f"config at: {configPath}")
+baseConfigPath = os.path.join(configDir, "config.ini")
+localConfigPath = os.path.join(configDir, "config.local.ini")
+if(os.path.exists(baseConfigPath)):
+    print(f"base config at: {baseConfigPath}")
 else:
-    raise Exception
+    raise FileNotFoundError(f"Missing required config file: {baseConfigPath}")
 
 config = configparser.ConfigParser()
-config.read(configPath)
+
+readPaths = [baseConfigPath]
+if os.path.exists(localConfigPath):
+    readPaths.append(localConfigPath)
+    print(f"local override config at: {localConfigPath}")
+
+config.read(readPaths)
 
 videoFilePath = config['file_paths']['videoFilePath']
 print(f"videoFilePath: {videoFilePath}")
