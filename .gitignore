@@ -1,1 +1,4 @@
-.jpg
+*.jpg
+*.mp4
+# only at the top level of the repo
+/[0-9]*/
